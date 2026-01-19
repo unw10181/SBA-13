@@ -5,6 +5,11 @@ require("dotenv").config();
 
 const mongoose = require("mongoose");
 
+// DB Connection
+mongoose.connect(process.env.DATABASE_URL);
+
+// Middleware
+app.use(express.urlencoded({ extended: true }));
 // INDUCES
 
 //Port - Listener
