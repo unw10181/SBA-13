@@ -2,14 +2,18 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const productRoutes = require("./routes/productRoutes");
 
 const dbConnection = require("./config/connection");
 
 // Middleware
+
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //DB Connection
 dbConnection();
+app.use("/", productRoutes);
 
 // INDUCES
 
