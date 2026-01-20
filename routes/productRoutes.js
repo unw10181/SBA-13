@@ -62,12 +62,49 @@ router.delete("/products/:id", async (req, res) => {
 
 //index GET ALL
 
-
 router.get("/products", async (req, res) => {
   try {
+    const {
+      category,
+      minPrice,
+      maxPrice,
+      sortBy,
+      page = 1,
+      limit = 10,
+    } = req.query;
 
+    const query = {};
+
+    // Filtering
+    if (category) {
+      query.category = category;
+    }
+
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = Number(minPrice);
+      if (maxPrice) query.price.$lte = Number(maxPrice);
+    }
+
+    // Sorting
+    let sortOption = {};
+    if (sortBy === "price_asc") {
+      sortOption.price = 1;
+    } else if (sortBy === "price_desc") {
+      sortOption.price = -1;
+    }
+
+    // Pagination
+    const skip = (page - 1) * limit;
+
+    const products = await Product.find(query)
+      .sort(sortOption)
+      .skip(skip)
+      .limit(Number(limit));
+
+    res.json(products);
   } catch (err) {
-    
+    res.status(500).json({ message: error.message });
   }
 });
 
