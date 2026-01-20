@@ -26,12 +26,15 @@ router.post("/products", (req, res) => {
 //GET By ID
 
 router.get("/products/:id", async (req, res) => {
-    try {
-        const product = await Product.findById(req.params.id);
-        if (!product) {
-            return res.status
-        }
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found." });
     }
-})
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
 
 module.exports = router;
