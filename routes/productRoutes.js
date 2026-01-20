@@ -44,9 +44,10 @@ router.put("/products/:id", async (req, res) => {
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
+    res.json(updatedProduct);
   } catch (err) {
     console.log(err);
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -54,7 +55,8 @@ router.put("/products/:id", async (req, res) => {
 router.delete("/products/:id", async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
-    res.redirect("/products");
+    console.log(deletedProduct);
+    res.json({ message: "Product deleted successfully" });
   } catch (error) {
     res.status(501).send(error);
   }
